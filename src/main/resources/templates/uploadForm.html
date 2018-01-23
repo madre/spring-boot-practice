@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<div th:if="${message}">
+		<h2 th:text="${message}"/>
+	</div>
+
+	<div>
+		<form method="POST" enctype="multipart/form-data" action="/">
+			<table>
+				<tr><td>请选择要上传的皮肤包资源</td><td><input type="file" name="file" /></td></tr>
+				<tr><td></td><td><input type="submit" value="点击上传" /></td></tr>
+			</table>
+		</form>
+	</div>
+
+	<div>
+		<ul>
+			<li th:each="file : ${files}">
+				<a th:href="${file}" th:text="${file}" />
+			</li>
+
+            <div th:if="${qrcode}">
+                <a text="皮肤包资源已经生成， 请使用书旗小说二维码扫码功能，扫描即可使用该皮肤包"/>
+                <img th:src="@{${qrcode}}" />
+            </div>
+		</ul>
+	</div>
+
+</body>
+</html>
