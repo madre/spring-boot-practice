@@ -22,12 +22,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.net.Inet4Address;
 import java.nio.file.*;
 import java.util.Enumeration;
 import java.util.List;
@@ -66,14 +72,27 @@ public class FileUploadController {
                     "serveFile", zip2001.getFileName().toString()).build().toString();
             log("serveFile:" + serveFile.toString());
             try {
-                QRCode.createQRCode(serveFile.toString(), qrcode.toString());
+                String ipAdress = Inet4Address.getLocalHost().getHostAddress();
+                String url = "http://" + ipAdress + ":9898/" + "files/" + zip2001.getFileName();
+                log("url:" + url);
+                QRCode.createQRCode(url, qrcode.toString());
             } catch (WriterException e) {
                 e.printStackTrace();
             }
             model.addAttribute("qrcode", "/files/" + qrcode.getFileName());
         }
+        ResponseEntity<Resource> resourceResponseEntity = null;
         log("listUploadedFiles() returned: " + model);
         return "uploadForm";
+    }
+
+    public String getCurrentIpAddress() {
+
+        RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+        Assert.state(attrs instanceof ServletRequestAttributes, "No current ServletRequestAttributes");
+
+        HttpServletRequest request = ((ServletRequestAttributes) attrs).getRequest();
+        return String.valueOf(request.getRequestURL());
     }
 
     @GetMapping("/upload")
@@ -99,7 +118,7 @@ public class FileUploadController {
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
+        log("serveFile:" + filename);
         Resource file = storageService.loadAsResource(filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
