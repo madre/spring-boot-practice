@@ -1,7 +1,7 @@
-package com.example.skinserver;
+package com.example.skinserver.controller;
 
+import com.example.skinserver.FileModel;
 import com.example.skinserver.storage.QRCode;
-import com.example.skinserver.storage.StorageFileNotFoundException;
 import com.example.skinserver.storage.StorageService;
 import com.google.zxing.WriterException;
 import org.apache.http.HttpEntity;
@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -55,7 +54,7 @@ public class FileUploadController {
         this.storageService = storageService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/skin")
     public String listUploadedFiles(Model model) throws IOException {
         log("listUploadedFiles:" + model);
         model.addAttribute("files", storageService.loadAll().map(
@@ -124,7 +123,7 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/")
+    @PostMapping("/skin")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
 
@@ -157,7 +156,7 @@ public class FileUploadController {
             }
 
         }
-        return "redirect:/";
+        return "redirect:/skin";
     }
 
     private static void unzip(Path zipFilePath, Path destDir) throws IOException {
@@ -219,7 +218,7 @@ public class FileUploadController {
         sendFileInternal(dataZipFile);
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + targetFile.getName() + "!" + dataZipFile.getName());
-        return "redirect:/";
+        return "redirect:/skin";
     }
 
     private void sendFileInternal(File file) throws IOException {
