@@ -26,12 +26,12 @@ public class MessageDigest
 
     public static final byte[] m9Encode(byte[] paramArrayOfByte)
     {
-        return m9Encode(M9_PLATFORM_KKJAVA, paramArrayOfByte);
+        return m9Encode(M9_PLATFORM_SERVER, paramArrayOfByte);
     }
 
     public static final byte[] m9Encode(int paramInt, byte[] paramArrayOfByte)
     {
-        int[] arrayOfInt1 = M9_JAVA_KEY;
+        int[] arrayOfInt1 = M9_SERVER_KEY;
 
         int[] arrayOfInt2 = new int[8];
         System.arraycopy(arrayOfInt1, 0, arrayOfInt2, 0, 8);

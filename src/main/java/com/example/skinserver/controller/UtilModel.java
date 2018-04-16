@@ -1,28 +1,43 @@
 package com.example.skinserver.controller;
 
 public class UtilModel {
-
-    private long id;
-    private String content;
+    private String encodeContent;
+    private String encodeResult;
+    private String decodeContent;
+    private String decodeResult;
 
     public UtilModel() {
-        id = 999;
-        content = "default";
-    }
-    public long getId() {
-        return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getEncodeContent() {
+        return encodeContent;
     }
 
-    public String getContent() {
-        return content;
+    public void setEncodeContent(String encodeContent) {
+        this.encodeContent = encodeContent;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public String getEncodeResult() {
+        return encodeResult;
     }
 
+    public void setEncodeResult(String encodeResult) {
+        this.encodeResult = encodeResult;
+    }
+
+    public String getDecodeContent() {
+        return decodeContent;
+    }
+
+    public void setDecodeContent(String decodeContent) {
+        this.decodeContent = decodeContent;
+    }
+
+    public String getDecodeResult() {
+        return decodeResult;
+    }
+
+    public void setDecodeResult(String decodeResult) {
+        this.decodeResult = decodeResult;
+    }
 }

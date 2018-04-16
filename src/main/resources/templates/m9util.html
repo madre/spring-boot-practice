@@ -1,15 +1,39 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head> 
+<head>
     <title>Sprint boot practice: M9Util</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-    <h1>Form</h1>
-    <form action="#" th:action="@{/util}" th:object="${greet}" method="post">
-        <p>Id: <input type="text" th:field="*{id}" /></p>
-        <p>Message: <input type="text" th:field="*{content}" /></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-    </form>
+<h1>M9 加密/解密</h1>
+
+<form action="#" th:action="@{/m9util/encode}" th:object="${util}" method="post">
+    <p>要加密的内容: <input type="text" th:field="*{EncodeContent}"/></p>
+    <p><input type="submit" value="加密"/> <input type="reset" value="Reset"/></p>
+</form>
+
+<form action="#" th:action="@{/m9util/decode}" th:object="${util}" method="post">
+    <p>要解密的内容: <input type="text" th:field="*{DecodeContent}"/></p>
+    <p><input type="submit" value="解密"/> <input type="reset" value="Reset"/></p>
+</form>
+
+<div th:if="${util.EncodeContent}">
+    <p>要加密的内容 </p>
+    <p th:text="${util.EncodeContent}"/>
+    <div th:if="${util.EncodeResult}">
+        <p>加密后的结果 </p>
+        <p th:text="${util.EncodeResult}"/>
+    </div>
+</div>
+
+<div th:if="${util.DecodeContent}">
+    <p>要解密的内容 </p>
+    <p th:text="${util.DecodeContent}"/>
+    <div th:if="${util.DecodeResult}">
+        <p>解密后的结果 </p>
+        <p th:text="${util.DecodeResult}"/>
+    </div>
+</div>
+
 </body>
 </html>

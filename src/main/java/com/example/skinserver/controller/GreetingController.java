@@ -20,4 +20,17 @@ public class GreetingController {
         return "result";
     }
 
+
+    @GetMapping("/greeting2")
+    public String greeting2Form(Model model) {
+        model.addAttribute("greet", new Greeting2());
+        return "m9util";
+    }
+
+    @PostMapping("/greeting2")
+    public String m9submit(@ModelAttribute Greeting2 greet, Model model) {
+        model.addAttribute("greet", greet);
+        return "m9utilResult";
+    }
+
 }

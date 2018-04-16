@@ -10,33 +10,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class M9UtilController {
 
-    @GetMapping("/util")
+    @GetMapping("/m9util")
     public String m9util(Model model) {
-        model.addAttribute("greet", new UtilModel());
+        model.addAttribute("util", new UtilModel());
         return "m9util";
     }
 
-    @PostMapping("/util")
-    public String m9submit(@ModelAttribute UtilModel util, Model model) {
-        String content = util.getContent();
-        String encode = M9Util.m9Encode(content);
-        util.setContent(encode);
+    @PostMapping("/m9util/encode")
+    public String m9EncodeSubmit(@ModelAttribute UtilModel util, Model model) {
+        String content = util.getEncodeContent();
+        String encode = M9Util.m9EncodeWithoutUrlEncode(content);
+        util.setEncodeResult(encode);
 
         System.out.println("input  : " + content);
-        System.out.println("decoded: " + encode);
-        model.addAttribute("greet", util);
-        return "encodeResult";
-    }
-
-    @GetMapping("/greeting2")
-    public String greetingForm(Model model) {
-        model.addAttribute("greet", new Greeting2());
+        System.out.println("encoded: " + encode);
+        model.addAttribute("util", util);
         return "m9util";
     }
 
-    @PostMapping("/greeting2")
-    public String m9submit(@ModelAttribute Greeting2 greet, Model model) {
-        model.addAttribute("greet", greet);
-        return "encodeResult";
+    @PostMapping("/m9util/decode")
+    public String m9DecodeSubmit(@ModelAttribute UtilModel util, Model model) {
+        String content = util.getDecodeContent();
+        String decode = M9Util.m9decode(content);
+        util.setDecodeResult(decode);
+
+        System.out.println("input  : " + content);
+        System.out.println("decoded: " + decode);
+        model.addAttribute("util", util);
+        return "m9util";
     }
+
 }
