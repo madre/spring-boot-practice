@@ -1,20 +1,15 @@
 package com.example.skinserver.mysql;
 
-import org.springframework.data.jpa.repository.support.JpaEntityInformation;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Created by chanson.cc on 2018/4/17.
  */
-public class UserSimpleRepository extends SimpleJpaRepository<User, Long> {
+public interface UserSimpleRepository extends CrudRepository<User, Long> {
 
-    public UserSimpleRepository(JpaEntityInformation<User, ?> entityInformation, EntityManager entityManager) {
-        super(entityInformation, entityManager);
-    }
+    List<User> findByName(String name);
 
-    public UserSimpleRepository(Class<User> domainClass, EntityManager em) {
-        super(domainClass, em);
-    }
+    Long deleteByName(String name);
 }
