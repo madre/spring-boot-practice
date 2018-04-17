@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sprint boot practice: M9Util</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Mysql CRUD 增删改查</h1>
+
+<form action="#" th:action="@{/user/add}" th:object="${user}" method="post">
+    <p>姓名: <input type="text" th:field="*{name}"/></p>
+    <p>email: <input type="text" th:field="*{email}"/></p>
+    <p>性别: <input type="text" th:field="*{gender}"/></p>
+    <p><input type="submit" value="新增"/> <input type="reset" value="Reset"/></p>
+</form>
+
+<form action="#" th:action="@{/user/all}" method="get">
+    <p><input type="submit" value="所有用户"/> <input type="reset" value="Reset"/></p>
+</form>
+
+
+<form action="#" th:action="@{/user/query}" th:object="${user}" method="get">
+    <p>姓名: <input type="text" th:field="*{name}"/></p>
+    <p><input type="submit" value="查询"/> <input type="reset" value="Reset"/></p>
+</form>
+
+<form action="#" th:action="@{/user/delete}" th:object="${user}" method="get">
+    <p>姓名: <input type="text" th:field="*{name}"/></p>
+    <p><input type="submit" value="删除"/> <input type="reset" value="Reset"/></p>
+</form>
+
+
+</body>
+</html>
