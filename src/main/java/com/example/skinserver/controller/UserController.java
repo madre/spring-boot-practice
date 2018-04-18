@@ -21,6 +21,12 @@ public class UserController {
     @Autowired
     private UserSimpleRepository userSimpleRepository;
 
+    @GetMapping("")
+    public String index1(Model model) {
+        model.addAttribute("user", new User());
+        return "user_index";
+    }
+
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("user", new User());
@@ -65,10 +71,10 @@ public class UserController {
         }
     }
 
-
     @GetMapping(path = "/all")
-    public @ResponseBody
-    Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+    public
+    String getAllUsers(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "user_all";
     }
 }
