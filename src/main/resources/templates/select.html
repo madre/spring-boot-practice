@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Select</h1>
+<form action="#" th:action="@{/select}" th:object="${select}" method='POST'>
+    <table>
+        <tr>
+            <td>Select Country:</td>
+            <td>
+                <select th:field="*{content}">
+                    <option th:each="country : ${select.list}"
+                            th:value="${country.id}"
+                            th:utext="${country.name}"/>
+                </select>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td><input name="submit" type="submit" value="submit" /></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
