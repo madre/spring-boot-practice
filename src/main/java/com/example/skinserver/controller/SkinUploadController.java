@@ -45,12 +45,12 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Controller
 @EnableAutoConfiguration
-public class FileUploadController {
+public class SkinUploadController {
 
     private final StorageService storageService;
 
     @Autowired
-    public FileUploadController(StorageService storageService) {
+    public SkinUploadController(StorageService storageService) {
         this.storageService = storageService;
     }
 
@@ -58,7 +58,7 @@ public class FileUploadController {
     public String listUploadedFiles(Model model) throws IOException {
         log("listUploadedFiles:" + model);
         model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                path -> MvcUriComponentsBuilder.fromMethodName(SkinUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
         Path zip2001 = storageService.load("2001.zip");
@@ -67,7 +67,7 @@ public class FileUploadController {
             log("qrcode:" + qrcode.toString());
             log("qrcode:" + qrcode.toUri());
             log("qrcode:" + qrcode.toAbsolutePath());
-            String serveFile = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+            String serveFile = MvcUriComponentsBuilder.fromMethodName(SkinUploadController.class,
                     "serveFile", zip2001.getFileName().toString()).build().toString();
             log("serveFile:" + serveFile.toString());
             try {
@@ -100,7 +100,7 @@ public class FileUploadController {
         log("listUploadedFiles:");
         List<String> serveFile = storageService.loadAll().map(path
                 ->
-                MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString())
+                MvcUriComponentsBuilder.fromMethodName(SkinUploadController.class, "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList());
         log("listUploadedFiles() returned: " + serveFile.size());
 
