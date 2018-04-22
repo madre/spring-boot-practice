@@ -5,8 +5,10 @@ import com.example.skinserver.storage.StorageFileNotFoundException;
 import com.example.skinserver.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -38,10 +45,12 @@ public class FileUploadController {
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
 
-        model.addAttribute("fileModelList", storageService.loadAll().map(
+        List<FileModel> fileModelList = storageService.loadAll().map(
                 path -> new FileModel(path.getFileName().toString(), MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString()))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        fileModelList.forEach(item -> item.crateQrcode(storageService));
+        model.addAttribute("fileModelList", fileModelList);
 
         return "files_index";
     }
@@ -76,5 +85,21 @@ public class FileUploadController {
 
     private static void log(String msg) {
         System.out.println(msg);
+    }
+
+    @RequestMapping(value="/upload-dir/{fileName:.+}", method=RequestMethod.GET)
+    @ResponseBody
+    ResponseEntity<InputStreamResource> uploadedFile(@PathVariable String fileName) throws IOException {
+        Resource file = storageService.loadAsResource(fileName);
+        return ResponseEntity
+                .ok()
+                .contentType(
+                        MediaType.parseMediaType(
+                                URLConnection.guessContentTypeFromName(fileName)
+                        )
+                )
+                .body(new InputStreamResource(
+                        Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ))
+                );
     }
 }

@@ -39,7 +39,7 @@
         <tr th:each="file : ${fileModelList}">
             <td th:text="${file.name}">Jack</td>
             <td th:text="${file.path}">jack@abc.com</td>
-            <td th:text="${file.qrcode}">male</td>
+            <td><img th:src="@{${file.qrcode}}" alt="" style="width:200px; height:auto;"></td>
         </tr>
     </table>
 </div>
