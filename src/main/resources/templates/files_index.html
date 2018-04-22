@@ -1,25 +1,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="/css/customers_table.css">
+    <script type="text/javascript" src="/js/index.js"></script>
+
+</head>
 <body>
 
 <div th:if="${message}">
-	<h2 th:text="${message}"/>
+    <h2 th:text="${message}"/>
 </div>
 
 <div>
-	<form method="POST" enctype="multipart/form-data" action="/files">
-		<table>
-			<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-			<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
-		</table>
-	</form>
+    <form method="POST" enctype="multipart/form-data" action="/files">
+        <table>
+            <tr>
+                <td>File to upload:</td>
+                <td><input type="file" name="file"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Upload"/></td>
+            </tr>
+        </table>
+    </form>
 </div>
 
 <div>
-	<ul>
-		<li th:each="file : ${files}">
-			<a th:href="${file}" th:text="${file}" />
-		</li>
-	</ul>
+    <table class="customers">
+        <tr>
+            <th>NAME</th>
+            <th>PATH</th>
+            <th>QRCode</th>
+        </tr>
+        <tr th:each="file : ${fileModelList}">
+            <td th:text="${file.name}">Jack</td>
+            <td th:text="${file.path}">jack@abc.com</td>
+            <td th:text="${file.qrcode}">male</td>
+        </tr>
+    </table>
 </div>
+
 </body>
 </html>

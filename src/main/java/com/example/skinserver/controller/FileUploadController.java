@@ -1,5 +1,6 @@
 package com.example.skinserver.controller;
 
+import com.example.skinserver.storage.FileModel;
 import com.example.skinserver.storage.StorageFileNotFoundException;
 import com.example.skinserver.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class FileUploadController {
         model.addAttribute("files", storageService.loadAll().map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
+                .collect(Collectors.toList()));
+
+        model.addAttribute("fileModelList", storageService.loadAll().map(
+                path -> new FileModel(path.getFileName().toString(), MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                        "serveFile", path.getFileName().toString()).build().toString()))
                 .collect(Collectors.toList()));
 
         return "files_index";
