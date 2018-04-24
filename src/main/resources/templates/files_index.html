@@ -13,6 +13,9 @@
 <div th:if="${message}">
     <h2 th:text="${message}"/>
 </div>
+<div th:if="${skinName}">
+    <h2 >上传的皮肤名称："[(${skinName})]"</h2>
+</div>
 
 <div>
     <form method="POST" enctype="multipart/form-data" action="/files">
@@ -22,10 +25,15 @@
                 <td><input type="file" name="file"/></td>
             </tr>
             <tr>
+                <td>皮肤包名称:</td>
+                <td><input type="text" name="skinName"/></td>
+            </tr>
+            <tr>
                 <td></td>
                 <td><input type="submit" value="Upload"/></td>
             </tr>
         </table>
+
     </form>
 </div>
 

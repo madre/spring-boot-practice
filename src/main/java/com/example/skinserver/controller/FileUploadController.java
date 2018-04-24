@@ -68,12 +68,14 @@ public class FileUploadController {
 
     @PostMapping("/files")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
+                                   @RequestParam("skinName") String skinName,
+
                                    RedirectAttributes redirectAttributes) {
 
         storageService.store(file);
         redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
-
+                "You successfully uploaded " + file.getOriginalFilename() + "!" + "with name:" + skinName);
+        redirectAttributes.addFlashAttribute("skinName", skinName);
         return "redirect:/files";
     }
 
