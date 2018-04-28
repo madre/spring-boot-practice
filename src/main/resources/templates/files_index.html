@@ -16,6 +16,9 @@
 <div th:if="${skinName}">
     <h2 >上传的皮肤名称："[(${skinName})]"</h2>
 </div>
+<div th:if="${select}">
+    <h2 >选择的内容"[(${select})]"</h2>
+</div>
 
 <div>
     <form method="POST" enctype="multipart/form-data" action="/files">
@@ -27,6 +30,18 @@
             <tr>
                 <td>皮肤包名称:</td>
                 <td><input type="text" name="skinName"/></td>
+            </tr>
+
+            <tr>
+                <td>Select Cars:</td>
+                <td>
+                    <select name="select">
+                        <option value="volvo">Volvo One</option>
+                        <option value="saab">Saab Two</option>
+                        <option value="fiat" selected="selected">Fiat Three</option>
+                        <option value="audi">Audi Four</option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td></td>
