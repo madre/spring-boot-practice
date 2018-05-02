@@ -2,7 +2,6 @@ package com.example.skinserver.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -10,7 +9,10 @@ import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.concurrent.CountDownLatch;
@@ -27,15 +29,23 @@ public class RedisController {
     CountDownLatch latch;
 
 
-    @GetMapping("/redis/send")
+    @PostMapping("/redis/send")
     public @ResponseBody
-    String sendMessge() {
-        sendMessgeInternal();
-        return "message sent";
+    String sendMessge(@RequestParam("msg") String message) {
+        sendMessgeInternal(message);
+        return "message sent:" + message;
     }
 
-    private void sendMessgeInternal() {
+    @GetMapping("/redis")
+    public
+    String redisIndex(Model model) {
+        return "redis_index";
+    }
+
+
+    private void sendMessgeInternal(String message) {
         template.convertAndSend("chat", "Hello from Redis!");
+        template.convertAndSend("chat", message);
 
         try {
             latch.await();
@@ -43,8 +53,6 @@ public class RedisController {
             e.printStackTrace();
         }
     }
-
-
 
     @Bean
     RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
@@ -63,17 +71,17 @@ public class RedisController {
     }
 
     @Bean
-    RedisReceiver receiver(CountDownLatch latch) {
+    RedisReceiver redisReceiver(CountDownLatch latch) {
         return new RedisReceiver(latch);
     }
 
     @Bean
-    CountDownLatch latch() {
+    CountDownLatch redisLatch() {
         return new CountDownLatch(1);
     }
 
     @Bean
-    StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
+    StringRedisTemplate redisTemplate(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
     }
 

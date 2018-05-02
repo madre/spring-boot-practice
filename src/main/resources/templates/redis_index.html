@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sprint boot practice: M9Util</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Redis send message</h1>
+
+<form action="/redis/send" th:action="@{/redis/send}"  method="post">
+    <p>要发送的消息: <input type="text" name="msg"/></p>
+    <p><input type="submit" value="发送"/> <input type="reset" value="Reset"/></p>
+</form>
+
+
+</body>
+</html>
