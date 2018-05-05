@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sprint boot practice: SkinFile CRUD</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="/css/customers_table.css">
+</head>
+<body>
+<h1>Mysql CRUD 增删改查- skinFile all</h1>
+
+<h2>SkinFile list</h2>
+<table id="customers">
+    <tr>
+        <th>ID</th>
+        <th>FILE_NAME</th>
+        <th>SKIN_NAME</th>
+        <th>SKIN_ID</th>
+        <th>RQCODE</th>
+        <th>ZIP</th>
+    </tr>
+    <tr th:each="skinFile : ${skinFiles}">
+        <td th:text="${skinFile.id}">id</td>
+        <td th:text="${skinFile.fileName}">fileName</td>
+        <td th:text="${skinFile.skinName}">skinName</td>
+        <td th:text="${skinFile.skinId}">skinId</td>
+        <td th:text="${skinFile.qrcode}">qrcode</td>
+        <td th:text="${skinFile.zip}">zip path</td>
+    </tr>
+</table>
+<p>
+    <a href="../">Return to home</a>
+</p>
+</body>
+</html>
