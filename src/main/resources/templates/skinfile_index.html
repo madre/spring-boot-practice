@@ -30,6 +30,19 @@
     <p><input type="submit" value="删除"/> <input type="reset" value="Reset"/></p>
 </form>
 
+<form method="POST" enctype="multipart/form-data" action="#" th:action="@{/skinFile/upload}">
+    <table>
+        <tr>
+            <td>File to upload:</td>
+            <td><input type="file" name="file"/></td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Upload"/></td>
+        </tr>
+    </table>
+</form>
 
 </body>
 </html>

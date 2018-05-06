@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -64,5 +66,18 @@ public class SkinFileController {
     String getAllSkinFiles(Model model) {
         model.addAttribute("skinFiles", skinFileRepository.findAll());
         return "skinfile_all";
+    }
+
+
+    @PostMapping("/upload")
+    public @ResponseBody
+    String handleFileUpload(@RequestParam("file") MultipartFile file,
+                                   RedirectAttributes redirectAttributes) {
+        String fileName = file.getOriginalFilename();
+        String skinName = "aaaa";
+        String skinId = "id";
+        String zip = "";
+        String qrcode = "";
+        return "uploaded:" + fileName;
     }
 }
