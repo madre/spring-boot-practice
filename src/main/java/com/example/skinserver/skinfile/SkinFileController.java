@@ -1,6 +1,6 @@
 package com.example.skinserver.skinfile;
 
-import com.example.skinserver.mysql.User;
+import com.example.skinserver.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +16,17 @@ import java.util.List;
 @Controller
 @RequestMapping(path = "/skinFile")
 public class SkinFileController {
+    private static final String DIR_NAME = "skin_file_dir";
     @Autowired
     private SkinFileRepository skinFileRepository;
     @Autowired
     private SkinFileSimpleRepository skinFileSimpleRepository;
+    private final StorageService storageService;
+
+    @Autowired
+    public SkinFileController(StorageService storageService) {
+        this.storageService = storageService;
+    }
 
     @GetMapping("")
     public String index1(Model model) {
@@ -78,6 +85,7 @@ public class SkinFileController {
         String skinId = "id";
         String zip = "";
         String qrcode = "";
+        storageService.store(DIR_NAME, file);
         return "uploaded:" + fileName;
     }
 }
