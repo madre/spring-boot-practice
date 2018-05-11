@@ -28,3 +28,7 @@ upload-dir/
 
 # log
 log/
+
+bash/uitool/
+bash/skinOutput/
+skin_file_dir/
