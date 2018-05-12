@@ -94,6 +94,12 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public Path load(String directory, String filename) {
+        Path path = Paths.get(directory);
+        return path.resolve(filename);
+    }
+
+    @Override
     public Resource loadAsResource(String filename) {
         try {
             Path file = load(filename);

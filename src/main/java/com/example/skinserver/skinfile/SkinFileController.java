@@ -1,6 +1,9 @@
 package com.example.skinserver.skinfile;
 
+import com.example.skinserver.SkinserverApplication;
 import com.example.skinserver.storage.StorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +11,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * Created by chanson.cc on 2018/5/5.
@@ -16,6 +27,7 @@ import java.util.List;
 @Controller
 @RequestMapping(path = "/skinFile")
 public class SkinFileController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SkinserverApplication.class);
     private static final String DIR_NAME = "skin_file_dir";
     @Autowired
     private SkinFileRepository skinFileRepository;
@@ -86,6 +98,49 @@ public class SkinFileController {
         String zip = "";
         String qrcode = "";
         storageService.store(DIR_NAME, file);
+
+
+        if (file.getOriginalFilename().endsWith("zip")) {
+            Path zipFilePath = storageService.load(DIR_NAME, file.getOriginalFilename());
+
+            Path destFilePath = Paths.get("data-dir", "target.zip");
+            try {
+                Files.copy(zipFilePath, destFilePath, REPLACE_EXISTING);
+
+                String cmd = "pwd";
+                String result = getCmdOutput(cmd);
+                LOGGER.debug(result);
+                cmd = "bash ./bash/hello.sh";
+                result = getCmdOutput(cmd);
+                LOGGER.debug(result);
+//                Path buildinfo = Paths.get("images").resolve("buildinfo");
+//                sendFileInternal(buildinfo.toFile());
+//                Path dataZip = Paths.get("images").resolve("2001.zip");
+//                sendFileInternal(dataZip.toFile());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
         return "uploaded:" + fileName;
+    }
+
+
+    private String getCmdOutput(String cmd) throws IOException, InterruptedException {
+        System.out.println("cmd:" + cmd);
+        Process ps = Runtime.getRuntime().exec(cmd);
+        ps.waitFor();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
+        StringBuffer sb = new StringBuffer();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        String result = sb.toString();
+        System.out.println(result);
+        return result;
     }
 }
