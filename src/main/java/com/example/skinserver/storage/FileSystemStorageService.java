@@ -16,6 +16,8 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.example.skinserver.skinfile.SkinFileController.DIR_NAME;
+
 @Service
 public class FileSystemStorageService implements StorageService {
 
@@ -126,6 +128,10 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void init() {
         try {
+            Path destFilePath = Paths.get("bash", "data-dir");
+            Files.createDirectories(destFilePath);
+            Path skinDirPath = Paths.get(DIR_NAME);
+            Files.createDirectories(skinDirPath);
             Files.createDirectories(rootLocation);
         }
         catch (IOException e) {

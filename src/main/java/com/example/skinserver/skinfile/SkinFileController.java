@@ -28,7 +28,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 @RequestMapping(path = "/skinFile")
 public class SkinFileController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SkinserverApplication.class);
-    private static final String DIR_NAME = "skin_file_dir";
+    public static final String DIR_NAME = "skin_file_dir";
     @Autowired
     private SkinFileRepository skinFileRepository;
     @Autowired
@@ -103,7 +103,7 @@ public class SkinFileController {
         if (file.getOriginalFilename().endsWith("zip")) {
             Path zipFilePath = storageService.load(DIR_NAME, file.getOriginalFilename());
 
-            Path destFilePath = Paths.get("data-dir", "target.zip");
+            Path destFilePath = Paths.get("bash", "data-dir", "target.zip");
             try {
                 Files.copy(zipFilePath, destFilePath, REPLACE_EXISTING);
 
