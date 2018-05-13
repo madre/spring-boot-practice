@@ -110,7 +110,7 @@ public class SkinFileController {
                 String cmd = "pwd";
                 String result = getCmdOutput(cmd);
                 LOGGER.debug(result);
-                cmd = "bash ./bash/hello.sh";
+                cmd = "bash ./bash/copyToSkinBuilder.sh";
                 result = getCmdOutput(cmd);
                 LOGGER.debug(result);
 //                Path buildinfo = Paths.get("images").resolve("buildinfo");
