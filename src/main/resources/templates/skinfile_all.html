@@ -20,6 +20,7 @@
         <th>SKIN_ID</th>
         <th>RQCODE</th>
         <th>ZIP</th>
+        <th>IMAGE</th>
     </tr>
     <tr th:each="skinFile : ${skinFiles}">
         <td th:text="${skinFile.id}">id</td>
@@ -28,6 +29,7 @@
         <td th:text="${skinFile.skinId}">skinId</td>
         <td th:text="${skinFile.qrcode}">qrcode</td>
         <td th:text="${skinFile.zip}">zip path</td>
+        <td><img th:src="@{${skinFile.qrcode}}" alt="" style="width:200px; height:auto;"></td>
     </tr>
 </table>
 <p>

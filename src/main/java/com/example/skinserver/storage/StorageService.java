@@ -20,6 +20,7 @@ public interface StorageService {
     Path load(String directory, String filename);
 
     Resource loadAsResource(String filename);
+    Resource loadAsResource(String dir, String filename);
 
     void deleteAll();
 

@@ -1,10 +1,16 @@
 package com.example.skinserver.skinfile;
 
 import com.example.skinserver.SkinserverApplication;
+import com.example.skinserver.storage.QRCode;
 import com.example.skinserver.storage.StorageService;
+import com.google.zxing.WriterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +20,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Inet4Address;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +67,7 @@ public class SkinFileController {
 
     @PostMapping(path = "/add")
     public @ResponseBody
-    String addNewUser(@ModelAttribute SkinFile skinFile) {
+    String addNewSkinFile(@ModelAttribute SkinFile skinFile) {
         skinFileRepository.save(skinFile);
         return "Saved";
     }
@@ -105,7 +115,7 @@ public class SkinFileController {
         if (file.getOriginalFilename().endsWith("zip")) {
             Path zipFilePath = storageService.load(DIR_NAME, file.getOriginalFilename());
 
-            String time = new SimpleDateFormat("yyyy年MM月dd日-HH:mm:ss").format(new Date());
+            String time = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
             String sourceName = skinName +"_" + time;
             Path destFilePath = Paths.get("bash", "data-dir", sourceName + ".zip");
             try {
@@ -128,8 +138,34 @@ public class SkinFileController {
                 e.printStackTrace();
             }
 
+            try {
+                String ipAdress = Inet4Address.getLocalHost().getHostAddress();
+                String url = "http://" + ipAdress + ":9898/" + "files/" + destFilePath.getFileName();
+                LOGGER.debug("url:" + url);
+
+
+                Path qrcodeFile = storageService.load("skinOutput", sourceName + "_QRCode.png");
+                QRCode.createQRCode(url, qrcodeFile.toString());
+                qrcode = qrcodeFile.toString();
+            } catch (WriterException e) {
+                e.printStackTrace();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            SkinFile skinFile = new SkinFile();
+            skinFile.setQrcode(qrcode);
+            skinFile.setZip(zipFilePath.toString());
+            skinFile.setSkinName(sourceName);
+
+            skinFileRepository.save(skinFile);
+
+            return "saved: " + skinFile.getSkinName();
+        } else {
+            return "uploaded:" + fileName;
         }
-        return "uploaded:" + fileName;
     }
 
 
@@ -147,5 +183,21 @@ public class SkinFileController {
         String result = sb.toString();
         System.out.println(result);
         return result;
+    }
+
+    @GetMapping("/skinOutput/{fileName:.+}")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> skinOutputFile(@PathVariable String fileName) throws IOException {
+        // pay attention to @PathVariable and difference between fileName and filename
+        Resource file = storageService.loadAsResource("skinOutput", fileName);
+        return ResponseEntity
+                .ok()
+                .contentType(
+                        MediaType.parseMediaType(
+                                URLConnection.guessContentTypeFromName(fileName)
+                        )
+                )
+                .body(new InputStreamResource(
+                            Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
     }
 }
