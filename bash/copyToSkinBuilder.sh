@@ -11,7 +11,15 @@ then
 else
     sourceZipFile=$1
 fi
-echo ${sourceZipFile}
+if [ -z "$2" ]
+then
+    sourceName="target"
+else
+    sourceName=$2
+fi
+echo "sourceZipFile=${sourceZipFile}"
+echo "sourceName=${sourceName}"
+# basename ${sourceZipFile}
 
 dstZipPath="bash/uitool/skinbuild/skinsrc/"
 dstZipFile="net_debug"
@@ -35,7 +43,7 @@ bash ${buildFile}
 outputPath="bash/uitool/skinbuild/skinoutputs/net/"
 
 echo ${outputPath}
-skinName="name"
+skinName=${sourceName}
 mv ${outputPath}2000 ${outputPath}${skinName}
 echo ":zip -r ${outputPath}${skinName}.zip ${outputPath}${skinName}"
 zip -r ${outputPath}${skinName}.zip ${outputPath}${skinName}

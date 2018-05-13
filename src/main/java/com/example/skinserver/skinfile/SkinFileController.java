@@ -17,6 +17,8 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -103,14 +105,17 @@ public class SkinFileController {
         if (file.getOriginalFilename().endsWith("zip")) {
             Path zipFilePath = storageService.load(DIR_NAME, file.getOriginalFilename());
 
-            Path destFilePath = Paths.get("bash", "data-dir", "target.zip");
+            String time = new SimpleDateFormat("yyyy年MM月dd日-HH:mm:ss").format(new Date());
+            String sourceName = skinName +"_" + time;
+            Path destFilePath = Paths.get("bash", "data-dir", sourceName + ".zip");
             try {
                 Files.copy(zipFilePath, destFilePath, REPLACE_EXISTING);
 
                 String cmd = "pwd";
                 String result = getCmdOutput(cmd);
                 LOGGER.debug(result);
-                cmd = "bash ./bash/copyToSkinBuilder.sh";
+                String relativePath  = "bash/data-dir/" + sourceName + ".zip";
+                cmd = String.format("bash ./bash/copyToSkinBuilder.sh %s %s", relativePath, sourceName);
                 result = getCmdOutput(cmd);
                 LOGGER.debug(result);
 //                Path buildinfo = Paths.get("images").resolve("buildinfo");
