@@ -1,5 +1,6 @@
 package com.example.skinserver;
 
+import com.example.skinserver.config.ConfigBean;
 import com.example.skinserver.storage.StorageProperties;
 import com.example.skinserver.storage.StorageService;
 import org.slf4j.Logger;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @SpringBootApplication
-@EnableConfigurationProperties(StorageProperties.class)
+@EnableConfigurationProperties(value = {StorageProperties.class, ConfigBean.class})
 public class SkinserverApplication {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SkinserverApplication.class);
 
