@@ -1,6 +1,6 @@
 package com.example.skinserver.skinfile;
 
-import com.example.skinserver.SkinserverApplication;
+import com.example.skinserver.config.ConfigBean;
 import com.example.skinserver.storage.QRCode;
 import com.example.skinserver.storage.StorageService;
 import com.google.zxing.WriterException;
@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,8 +40,11 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 @Controller
 @RequestMapping(path = "/skinFile")
 public class SkinFileController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SkinserverApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SkinFileController.class);
     public static final String DIR_NAME = "skin_file_dir";
+
+    @Autowired
+    private ConfigBean configBean;
     @Autowired
     private SkinFileRepository skinFileRepository;
     @Autowired
@@ -139,8 +143,11 @@ public class SkinFileController {
             }
 
             try {
-                String ipAdress = Inet4Address.getLocalHost().getHostAddress();
-                String url = "http://" + ipAdress + ":9898/" + "files/" + destFilePath.getFileName();
+                String ipAdress = configBean.getIpAddress();
+                if (StringUtils.isEmpty(ipAdress)) {
+                    ipAdress = Inet4Address.getLocalHost().getHostAddress();
+                }
+                String url = "http://" + ipAdress + ":9898/" + "/skinFile/skinOutput/" + destFilePath.getFileName();
                 LOGGER.debug("url:" + url);
 
 

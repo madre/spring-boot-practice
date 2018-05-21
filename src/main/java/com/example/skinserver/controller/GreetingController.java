@@ -1,6 +1,8 @@
 package com.example.skinserver.controller;
 
 import com.example.skinserver.config.ConfigBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class GreetingController {
+    private final Logger logger = LoggerFactory.getLogger(GreetingController.class);
+
+
     @Value("${local.ipAddress}")
     private String ipAddress;
 
@@ -25,6 +30,12 @@ public class GreetingController {
         Greeting greeting = new Greeting();
         greeting.setContent(ipAddress + "_" + name);
         model.addAttribute("greeting", greeting);
+        logger.debug("========>>>>>>>>>");
+        logger.debug(greeting.getContent());
+        logger.debug("This is a debug message");
+        logger.info("This is an info message");
+        logger.warn("This is a warn message");
+        logger.error("This is an error message");
         return "greeting";
     }
 
