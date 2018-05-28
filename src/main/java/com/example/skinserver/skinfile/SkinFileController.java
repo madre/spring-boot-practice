@@ -208,6 +208,7 @@ public class SkinFileController {
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getFilename())
                 .contentType(mediaType)
+                .contentLength(file.contentLength())
                 .body(new InputStreamResource(Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
     }
 }
