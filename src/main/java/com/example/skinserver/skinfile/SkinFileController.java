@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.ServletContext;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Inet4Address;
-import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,6 +44,8 @@ public class SkinFileController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SkinFileController.class);
     public static final String DIR_NAME = "skin_file_dir";
 
+    @Autowired
+    private ServletContext servletContext;
     @Autowired
     private ConfigBean configBean;
     @Autowired
@@ -195,16 +198,16 @@ public class SkinFileController {
     @GetMapping("/skinOutput/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<InputStreamResource> skinOutputFile(@PathVariable String fileName) throws IOException {
+        LOGGER.debug("fileName: " + fileName);
+        String mineType = servletContext.getMimeType(fileName);
+        MediaType mediaType = MediaType.parseMediaType(mineType);
+        LOGGER.debug("mediaType:"+ mediaType);
         // pay attention to @PathVariable and difference between fileName and filename
         Resource file = storageService.loadAsResource("skinOutput", fileName);
         return ResponseEntity
                 .ok()
-                .contentType(
-                        MediaType.parseMediaType(
-                                URLConnection.guessContentTypeFromName(fileName)
-                        )
-                )
-                .body(new InputStreamResource(
-                            Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getFilename())
+                .contentType(mediaType)
+                .body(new InputStreamResource(Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
     }
 }
