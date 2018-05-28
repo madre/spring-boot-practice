@@ -147,7 +147,7 @@ public class SkinFileController {
                 if (StringUtils.isEmpty(ipAdress)) {
                     ipAdress = Inet4Address.getLocalHost().getHostAddress();
                 }
-                String url = "http://" + ipAdress + ":9898/" + "/skinFile/skinOutput/" + destFilePath.getFileName();
+                String url = "http://" + ipAdress + ":9898" + "/skinFile/skinOutput/" + destFilePath.getFileName();
                 LOGGER.debug("url:" + url);
 
 
