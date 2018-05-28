@@ -46,7 +46,7 @@ echo ${outputPath}
 skinName=${sourceName}
 mv ${outputPath}2000 ${outputPath}${skinName}
 echo ":zip -r ${outputPath}${skinName}.zip ${outputPath}${skinName}"
-zip -r ${outputPath}${skinName}.zip ${outputPath}${skinName}
+zip -r -j ${outputPath}${skinName}.zip ${outputPath}${skinName}
 
 skinOutput="skinOutput/"
 if [ ! -d "${skinOutput}" ]; then
