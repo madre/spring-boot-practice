@@ -45,7 +45,7 @@ outputPath="bash/uitool/skinbuild/skinoutputs/net/"
 echo ${outputPath}
 skinName=${sourceName}
 mv ${outputPath}2000 ${outputPath}${skinName}
-echo ":zip -r ${outputPath}${skinName}.zip ${outputPath}${skinName}"
+echo ":zip -r -j ${outputPath}${skinName}.zip ${outputPath}${skinName}"
 zip -r -j ${outputPath}${skinName}.zip ${outputPath}${skinName}
 
 skinOutput="skinOutput/"
