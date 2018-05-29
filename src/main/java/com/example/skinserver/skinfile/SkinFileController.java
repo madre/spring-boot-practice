@@ -204,9 +204,20 @@ public class SkinFileController {
         LOGGER.debug("mediaType:"+ mediaType);
         // pay attention to @PathVariable and difference between fileName and filename
         Resource file = storageService.loadAsResource("skinOutput", fileName);
+
+        String retFileName;
+        if (fileName.endsWith(".zip")) {
+            List<SkinFile> all = skinFileSimpleRepository.findBySkinName(fileName.substring(0, fileName.lastIndexOf(".")));
+            String id = String.valueOf(all.get(0).getId());
+            LOGGER.debug("Id:" + id);
+            retFileName = id + ".zip";
+        } else {
+            retFileName = file.getFilename();
+        }
+
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getFilename())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + retFileName)
                 .contentType(mediaType)
                 .contentLength(file.contentLength())
                 .body(new InputStreamResource(Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
