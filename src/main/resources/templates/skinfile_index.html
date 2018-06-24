@@ -3,13 +3,28 @@
 <head>
     <title>Sprint boot practice: M9Util</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style >
+        .content {
+            width:998px;
+            margin:0 auto;
+
+        }
+        h1 {
+            text-align:center;
+        }
+        .uploadform {
+            text-align:right;
+        }
+    </style>
 </head>
 <body>
+<div class="content">
+
 <h1>Mysql SkinFile CRUD 增删改查</h1>
 
 <form action="#" th:action="@{/skinFile/add}" th:object="${skinFile}" method="post">
-    <p>文件名: <input type="text" th:field="*{fileName}"/></p>
-    <p>皮肤名称: <input type="text" th:field="*{skinName}"/></p>
+    <p>文件名: <input type="text" th:field="*{originFileName}"/></p>
+    <p>皮肤名称: <input type="text" th:field="*{skinOutputFileName}"/></p>
     <p>皮肤id: <input type="text" th:field="*{skinId}"/></p>
     <p>二维码: <input type="text" th:field="*{qrcode}"/></p>
     <p>zip文件: <input type="text" th:field="*{zip}"/></p>
@@ -21,28 +36,25 @@
 </form>
 
 <form action="#" th:action="@{/skinFile/query}" th:object="${skinFile}" method="get">
-    <p>皮肤名称: <input type="text" th:field="*{skinName}"/></p>
+    <p>皮肤名称: <input type="text" th:field="*{skinOutputFileName}"/></p>
     <p><input type="submit" value="查询"/> <input type="reset" value="Reset"/></p>
 </form>
 
 <form action="#" th:action="@{/skinFile/delete}" th:object="${skinFile}" method="get">
-    <p>皮肤名称: <input type="text" th:field="*{skinName}"/></p>
+    <p>皮肤名称: <input type="text" th:field="*{skinOutputFileName}"/></p>
     <p><input type="submit" value="删除"/> <input type="reset" value="Reset"/></p>
 </form>
 
-<form method="POST" enctype="multipart/form-data" action="#" th:action="@{/skinFile/upload}">
-    <table>
-        <tr>
-            <td>File to upload:</td>
-            <td><input type="file" name="file"/></td>
-        </tr>
+    <form class="uploadform" method="POST" enctype="multipart/form-data" action="#" th:action="@{/skinFile/upload}">
+        <p>
+        <div>File to upload: <input type="file" name="file"/></div>
+        </p>
 
-        <tr>
-            <td></td>
-            <td><input type="submit" value="Upload"/></td>
-        </tr>
-    </table>
-</form>
+        <p>
+            <input type="submit" value="Upload"/>
+        </p>
+    </form>
 
+</div>
 </body>
 </html>

@@ -5,35 +5,69 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
 
+        .content {
+            width:998px;
+            margin:0 auto;
+
+        }
+        h1 {
+            text-align:center;
+        }
+        .uploadform {
+            text-align:right;
+        }
+
+
     </style>
     <link rel="stylesheet" type="text/css" href="/css/customers_table.css">
 </head>
 <body>
-<h1>Mysql CRUD 增删改查- skinFile all</h1>
+<div class="content">
+    <h1>Mysql CRUD 增删改查- skinFile all</h1>
 
-<h2>SkinFile list</h2>
-<table id="customers">
-    <tr>
-        <th>ID</th>
-        <th>FILE_NAME</th>
-        <th>SKIN_NAME</th>
-        <th>SKIN_ID</th>
-        <th>RQCODE</th>
-        <th>ZIP</th>
-        <th>IMAGE</th>
-    </tr>
-    <tr th:each="skinFile : ${skinFiles}">
-        <td th:text="${skinFile.id}">id</td>
-        <td th:text="${skinFile.fileName}">fileName</td>
-        <td th:text="${skinFile.skinName}">skinName</td>
-        <td th:text="${skinFile.skinId}">skinId</td>
-        <td th:text="${skinFile.qrcode}">qrcode</td>
-        <td th:text="${skinFile.zip}">zip path</td>
-        <td><img th:src="@{${skinFile.qrcode}}" alt="" style="width:200px; height:auto;"></td>
-    </tr>
-</table>
-<p>
-    <a href="../">Return to home</a>
-</p>
+
+    <form class="uploadform" method="POST" enctype="multipart/form-data" action="#" th:action="@{/skinFile/upload}">
+        <p>
+        <div>File to upload: <input type="file" name="file"/></div>
+        </p>
+
+        <p>
+            <input type="submit" value="Upload"/>
+        </p>
+    </form>
+
+    <h2>SkinFile list</h2>
+    <table id="customers">
+        <tr>
+            <th>ID</th>
+            <th>文件名</th>
+            <th>日期</th>
+            <th>二维码</th>
+            <th>下载</th>
+            <th>删除</th>
+        </tr>
+        <tr th:each="skinFile : ${skinFiles}">
+            <td th:text="${skinFile.id}">id</td>
+            <td th:text="${skinFile.originFileName}">originFileName</td>
+            <td th:text="${skinFile.skinOutputFileName}">skinOutputFileName</td>
+            <td><img th:src="@{${skinFile.qrcode}}" alt="" style="width:200px; height:auto;"></td>
+            <td>
+                <form action="#" th:action="@{/skinFile/download}" th:object="${skinFile}" method="get">
+
+                    <input type="hidden" name="fileName" th:value="${skinFile.skinOutputFileName}" />
+                    <p><input type="submit" value="点击下载"/></p>
+                </form>
+            </td>
+
+            <td>
+                <form action="#" th:action="@{/skinFile/delete}" th:object="${skinFile}" method="get">
+
+                    <input type="hidden" name="id" th:value="${skinFile.id}" />
+                    <p><input type="submit" value="删除"/></p>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

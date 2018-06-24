@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface SkinFileSimpleRepository extends CrudRepository<SkinFile, Long> {
 
-    List<SkinFile> findBySkinName(String skinName);
+    List<SkinFile> findBySkinOutputFileName(String skinName);
 
-    Long deleteBySkinName(String skinName);
+    Long deleteBySkinOutputFileName(String skinName);
 }

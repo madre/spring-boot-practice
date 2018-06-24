@@ -3,6 +3,7 @@ package com.example.skinserver.skinfile;
 import com.example.skinserver.config.ConfigBean;
 import com.example.skinserver.storage.QRCode;
 import com.example.skinserver.storage.StorageService;
+import com.google.common.io.Files;
 import com.google.zxing.WriterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Inet4Address;
+import java.net.URLDecoder;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
+import java.nio.charset.CharsetEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -82,20 +84,26 @@ public class SkinFileController {
     @GetMapping(path = "/query")
     public @ResponseBody
     Iterable<SkinFile> query(@ModelAttribute SkinFile skinFile) {
-        List<SkinFile> all = skinFileSimpleRepository.findBySkinName(skinFile.getSkinName());
+        List<SkinFile> all = skinFileSimpleRepository.findBySkinOutputFileName(skinFile.getSkinOutputFileName());
         return all;
     }
 
     @GetMapping(path = "/delete")
     public @ResponseBody
     Long delete(@ModelAttribute SkinFile skinFile) {
-        List<SkinFile> all = skinFileSimpleRepository.findBySkinName(skinFile.getSkinName());
-        if (all.isEmpty()) {
-            return 0l;
-        } else {
-            long id = all.get(0).getId();
+        if (skinFile.getId() > 0) {
+            long id = skinFile.getId();
             skinFileSimpleRepository.deleteById(id);
             return id;
+        } else {
+            List<SkinFile> all = skinFileSimpleRepository.findBySkinOutputFileName(skinFile.getSkinOutputFileName());
+            if (all.isEmpty()) {
+                return 0l;
+            } else {
+                long id = all.get(0).getId();
+                skinFileSimpleRepository.deleteById(id);
+                return id;
+            }
         }
     }
 
@@ -108,10 +116,12 @@ public class SkinFileController {
 
 
     @PostMapping("/upload")
-    public @ResponseBody
+    public
     String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) {
         String fileName = file.getOriginalFilename();
+
+        String fileNameWithoutExtension = Files.getNameWithoutExtension(fileName);;
         String skinName = "aaaa";
         String skinId = "id";
         String zip = "";
@@ -123,10 +133,10 @@ public class SkinFileController {
             Path zipFilePath = storageService.load(DIR_NAME, file.getOriginalFilename());
 
             String time = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date());
-            String sourceName = skinName +"_" + time;
+            String sourceName = time + "_" + fileNameWithoutExtension;
             Path destFilePath = Paths.get("bash", "data-dir", sourceName + ".zip");
             try {
-                Files.copy(zipFilePath, destFilePath, REPLACE_EXISTING);
+                java.nio.file.Files.copy(zipFilePath, destFilePath, REPLACE_EXISTING);
 
                 String cmd = "pwd";
                 String result = getCmdOutput(cmd);
@@ -166,15 +176,16 @@ public class SkinFileController {
             }
 
             SkinFile skinFile = new SkinFile();
+            skinFile.setOriginFileName(fileName);
             skinFile.setQrcode(qrcode);
             skinFile.setZip(zipFilePath.toString());
-            skinFile.setSkinName(sourceName);
+            skinFile.setSkinOutputFileName(sourceName + ".zip");
 
             skinFileRepository.save(skinFile);
 
-            return "saved: " + skinFile.getSkinName();
+            return "redirect:/skinFile/all";
         } else {
-            return "uploaded:" + fileName;
+            return "redirect:/skinFile/all";
         }
     }
 
@@ -198,7 +209,10 @@ public class SkinFileController {
     @GetMapping("/skinOutput/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<InputStreamResource> skinOutputFile(@PathVariable String fileName) throws IOException {
+
         LOGGER.debug("fileName: " + fileName);
+        fileName = URLDecoder.decode(fileName,  "utf-8");
+        LOGGER.debug("fileName decoded: " + fileName);
         String mineType = servletContext.getMimeType(fileName);
         MediaType mediaType = MediaType.parseMediaType(mineType);
         LOGGER.debug("mediaType:"+ mediaType);
@@ -207,7 +221,7 @@ public class SkinFileController {
 
         String retFileName;
         if (fileName.endsWith(".zip")) {
-            List<SkinFile> all = skinFileSimpleRepository.findBySkinName(fileName.substring(0, fileName.lastIndexOf(".")));
+            List<SkinFile> all = skinFileSimpleRepository.findBySkinOutputFileName(fileName.substring(0, fileName.lastIndexOf(".")));
             String id = String.valueOf(all.get(0).getId());
             LOGGER.debug("Id:" + id);
             retFileName = id + ".zip";
@@ -220,6 +234,39 @@ public class SkinFileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + retFileName)
                 .contentType(mediaType)
                 .contentLength(file.contentLength())
-                .body(new InputStreamResource(Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
+                .body(new InputStreamResource(java.nio.file.Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
+    }
+
+    @GetMapping("/download")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> downloadOutpufFile(@RequestParam("fileName") String fileName) throws IOException {
+
+        LOGGER.debug("fileName: " + fileName);
+        fileName = URLDecoder.decode(fileName,  "utf-8");
+        LOGGER.debug("fileName decoded: " + fileName);
+        String mineType = servletContext.getMimeType(fileName);
+        MediaType mediaType = MediaType.parseMediaType(mineType);
+        LOGGER.debug("mediaType:"+ mediaType);
+        // pay attention to @PathVariable and difference between fileName and filename
+        Resource file = storageService.loadAsResource("skinOutput", fileName);
+
+        String retFileName = file.getFilename();
+        if (fileName.endsWith(".zip")) {
+            List<SkinFile> all = skinFileSimpleRepository.findBySkinOutputFileName(fileName.substring(0, fileName.lastIndexOf(".")));
+            if (!all.isEmpty()) {
+                String id = String.valueOf(all.get(0).getId());
+                LOGGER.debug("Id:" + id);
+                retFileName = id + ".zip";
+            }
+        } else {
+            retFileName = file.getFilename();
+        }
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + retFileName)
+                .contentType(mediaType)
+                .contentLength(file.contentLength())
+                .body(new InputStreamResource(java.nio.file.Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
     }
 }

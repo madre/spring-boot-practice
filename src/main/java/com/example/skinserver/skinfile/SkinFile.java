@@ -13,8 +13,8 @@ public class SkinFile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String fileName;
-    private String skinName;
+    private String originFileName;
+    private String skinOutputFileName;
     private String skinId;
     private String qrcode;
     private String zip;
@@ -27,20 +27,20 @@ public class SkinFile {
         this.id = id;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getOriginFileName() {
+        return originFileName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setOriginFileName(String originFileName) {
+        this.originFileName = originFileName;
     }
 
-    public String getSkinName() {
-        return skinName;
+    public String getSkinOutputFileName() {
+        return skinOutputFileName;
     }
 
-    public void setSkinName(String skinName) {
-        this.skinName = skinName;
+    public void setSkinOutputFileName(String skinOutputFileName) {
+        this.skinOutputFileName = skinOutputFileName;
     }
 
     public String getSkinId() {
