@@ -89,22 +89,21 @@ public class SkinFileController {
     }
 
     @GetMapping(path = "/delete")
-    public @ResponseBody
-    Long delete(@ModelAttribute SkinFile skinFile) {
+    public
+    String delete(@ModelAttribute SkinFile skinFile) {
         if (skinFile.getId() > 0) {
             long id = skinFile.getId();
             skinFileSimpleRepository.deleteById(id);
-            return id;
         } else {
             List<SkinFile> all = skinFileSimpleRepository.findBySkinOutputFileName(skinFile.getSkinOutputFileName());
             if (all.isEmpty()) {
-                return 0l;
             } else {
                 long id = all.get(0).getId();
                 skinFileSimpleRepository.deleteById(id);
-                return id;
             }
         }
+
+        return "redirect:/skinFile/all";
     }
 
     @GetMapping(path = "/all")
