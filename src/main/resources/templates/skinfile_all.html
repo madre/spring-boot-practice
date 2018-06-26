@@ -12,12 +12,18 @@
 
         }
         .content_bg {
+            background:#F5F6F8;
+        }
+        .list_bg {
             background:#FFF;
+            padding:16px 64px 32px 64px;
         }
         h1 {
             text-align:center;
+            background:#FFF;
         }
         .uploadform {
+            padding:64px 0px 32px 0px;
             text-align:right;
         }
         .header {
@@ -33,7 +39,7 @@
         }
 
         .customers td, .customers th {
-            border: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
             padding: 8px;
             word-wrap : break-word;
             word-break:break-all;
@@ -123,60 +129,67 @@
         }
 
 
+
     </style>
-    <script >
+    <script>
         function uploadFile(target) {
             document.getElementById("file-name").innerHTML = target.files[0].name;
         }
+
     </script>
     <!--<link rel="stylesheet" type="text/css" href="css/customers_table.css">-->
 </head>
-<body style="background:#F5F6F8">
-<div class="content">
-    <h1>皮肤打包平台</h1>
+<body style="background:#FFF">
+<h1>皮肤打包平台</h1>
+<div class="content_bg">
+    <div class="content content_bg">
 
+        <form class="uploadform" method="POST" enctype="multipart/form-data" action="#" th:action="@{/skinFile/upload}">
+            <span id="file-name" class="file-box"></span>
+            <label class="file-button" for="select-file">选择文件</label>
+            <input type="file" name="file" id="select-file" onchange='uploadFile(this)'/>
 
-    <form class="uploadform" method="POST" enctype="multipart/form-data" action="#" th:action="@{/skinFile/upload}">
-        <span id="file-name" class="file-box"></span>
-        <label class="file-button" for="select-file">选择文件</label>
-        <input type="file" name="file" id="select-file" onchange='uploadFile(this)'/>
+            <label class="upload-button" for="upload-file">上传</label>
+            <input type="submit" value="Upload" id="upload-file"/>
+        </form>
 
-        <label class="upload-button" for="upload-file">上传</label>
-        <input type="submit" value="Upload" id="upload-file" />
-    </form>
+        <div class="list_bg">
+            <h2>皮肤包列表</h2>
+            <table class="customers">
+                <tr>
+                    <th width="100">ID</th>
+                    <th>文件名</th>
+                    <th width="100">日期</th>
+                    <th width="100">二维码</th>
+                    <th width="100">下载</th>
+                    <th width="100">删除</th>
+                </tr>
+                <tr th:each="skinFile : ${skinFiles}">
+                    <td th:text="${skinFile.id}">id</td>
+                    <td th:text="${skinFile.originFileName}">originFil eNameorig inFileNameorig
+                        inFileNameoriginFileNameoriginFileNameoriginFileNameoriginFileNameoriginFileNameoriginFileName
+                    </td>
+                    <td th:text="${skinFile.skinOutputFileName}">skinOutputFileName</td>
+                    <td><img th:src="@{${skinFile.qrcode}}" alt="" style="width:200px; height:auto;"></td>
+                    <td>
+                        <form action="#" th:action="@{/skinFile/download}" th:object="${skinFile}" method="get">
 
-    <h2>皮肤包列表</h2>
-    <table class="customers content_bg">
-        <tr>
-            <th width="100">ID</th>
-            <th >文件名</th>
-            <th width="100">日期</th>
-            <th width="100">二维码</th>
-            <th  width="100">下载</th>
-            <th  width="100">删除</th>
-        </tr>
-        <tr th:each="skinFile : ${skinFiles}">
-            <td th:text="${skinFile.id}">id</td>
-            <td th:text="${skinFile.originFileName}">originFil eNameorig inFileNameorig inFileNameoriginFileNameoriginFileNameoriginFileNameoriginFileNameoriginFileNameoriginFileName</td>
-            <td th:text="${skinFile.skinOutputFileName}">skinOutputFileName</td>
-            <td><img th:src="@{${skinFile.qrcode}}" alt="" style="width:200px; height:auto;"></td>
-            <td>
-                <form action="#" th:action="@{/skinFile/download}" th:object="${skinFile}" method="get">
+                            <input type="hidden" name="fileName" th:value="${skinFile.skinOutputFileName}"/>
+                            <p><input class="download" type="submit" value="点击下载"/></p>
+                        </form>
+                    </td>
 
-                    <input type="hidden" name="fileName" th:value="${skinFile.skinOutputFileName}" />
-                    <p><input class="download" type="submit" value="点击下载"/></p>
-                </form>
-            </td>
+                    <td>
+                        <form action="#" th:action="@{/skinFile/delete}" th:object="${skinFile}" method="get">
 
-            <td>
-                <form action="#" th:action="@{/skinFile/delete}" th:object="${skinFile}" method="get">
-
-                    <input type="hidden" name="id" th:value="${skinFile.id}" />
-                    <p><input class="delete" type="submit" value="删除"/></p>
-                </form>
-            </td>
-        </tr>
-    </table>
+                            <input type="hidden" name="id" th:value="${skinFile.id}"/>
+                            <p><input class="delete" type="submit" value="删除"/></p>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>
