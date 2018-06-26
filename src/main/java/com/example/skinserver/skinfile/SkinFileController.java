@@ -208,32 +208,7 @@ public class SkinFileController {
     @GetMapping("/skinOutput/{fileName:.+}")
     @ResponseBody
     public ResponseEntity<InputStreamResource> skinOutputFile(@PathVariable String fileName) throws IOException {
-
-        LOGGER.debug("fileName: " + fileName);
-        fileName = URLDecoder.decode(fileName,  "utf-8");
-        LOGGER.debug("fileName decoded: " + fileName);
-        String mineType = servletContext.getMimeType(fileName);
-        MediaType mediaType = MediaType.parseMediaType(mineType);
-        LOGGER.debug("mediaType:"+ mediaType);
-        // pay attention to @PathVariable and difference between fileName and filename
-        Resource file = storageService.loadAsResource("skinOutput", fileName);
-
-        String retFileName;
-        if (fileName.endsWith(".zip")) {
-            List<SkinFile> all = skinFileSimpleRepository.findBySkinOutputFileName(fileName.substring(0, fileName.lastIndexOf(".")));
-            String id = String.valueOf(all.get(0).getId());
-            LOGGER.debug("Id:" + id);
-            retFileName = id + ".zip";
-        } else {
-            retFileName = file.getFilename();
-        }
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + retFileName)
-                .contentType(mediaType)
-                .contentLength(file.contentLength())
-                .body(new InputStreamResource(java.nio.file.Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
+        return downloadOutpufFile(fileName);
     }
 
     @GetMapping("/download")
