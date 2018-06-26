@@ -68,6 +68,36 @@
             box-sizing:content-box;
         }
 
+        .file-button {
+            background: #FFFFFF;
+            border: 1px solid #F8F8F8;
+            box-shadow: 0 4px 8px 0 rgba(219,219,219,0.50);
+            border-radius: 100px;
+            opacity: 0.5;
+            font-family: PingFangSC-Medium;
+            font-size: 14px;
+            color: #404047;
+            text-align: center;
+            line-height:16px;
+            height:16px;
+            padding:4px 16px;
+            box-sizing:content-box;
+        }
+        .upload-button {
+            background: #E94868;
+            box-shadow: 0 4px 8px 0 rgba(233,72,104,0.32);
+            border-radius: 100px;
+            border:0;
+            font-family: PingFangSC-Medium;
+            font-size: 11px;
+            color: #FFFFFF;
+            text-align: center;
+            line-height:16px;
+            height:16px;
+            padding:4px 16px;
+            box-sizing:content-box;
+        }
+
         .customers th {
             color: white;
             opacity: 0.3;
@@ -75,10 +105,30 @@
             font-size: 12px;
             color: #404047;
         }
+        label {
+           cursor: pointer;
+           /* Style as you please, it will become the visible UI component. */
+        }
 
+        #select-file {
+           opacity: 0;
+           position: absolute;
+           z-index: -1;
+        }
+
+        #upload-file {
+           opacity: 0;
+           position: absolute;
+           z-index: -1;
+        }
 
 
     </style>
+    <script >
+        function uploadFile(target) {
+            document.getElementById("file-name").innerHTML = target.files[0].name;
+        }
+    </script>
     <!--<link rel="stylesheet" type="text/css" href="css/customers_table.css">-->
 </head>
 <body style="background:#F5F6F8">
@@ -87,13 +137,12 @@
 
 
     <form class="uploadform" method="POST" enctype="multipart/form-data" action="#" th:action="@{/skinFile/upload}">
-        <p>
-        <div>File to upload: <input type="file" name="file"/></div>
-        </p>
+        <span id="file-name" class="file-box"></span>
+        <label class="file-button" for="select-file">选择文件</label>
+        <input type="file" name="file" id="select-file" onchange='uploadFile(this)'/>
 
-        <p>
-            <input type="submit" value="Upload"/>
-        </p>
+        <label class="upload-button" for="upload-file">上传</label>
+        <input type="submit" value="Upload" id="upload-file" />
     </form>
 
     <h2>皮肤包列表</h2>
