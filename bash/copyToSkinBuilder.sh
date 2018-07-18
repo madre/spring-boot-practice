@@ -17,6 +17,8 @@ then
 else
     sourceName=$2
 fi
+originName=${sourceName}
+sourceName="temp_source"
 echo "sourceZipFile=${sourceZipFile}"
 echo "sourceName=${sourceName}"
 # basename ${sourceZipFile}
@@ -53,5 +55,6 @@ if [ ! -d "${skinOutput}" ]; then
     mkdir ${skinOutput}
 fi
 echo ":cp ${outputPath}${skinName}.zip ${skinOutput}"
-cp ${outputPath}${skinName}.zip ${skinOutput}
+cp ${outputPath}${skinName}.zip ${skinOutput}${originName}.zip
+
 
