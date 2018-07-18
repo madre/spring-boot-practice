@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>防覆盖文件生成工具</h1>
+
+<div>参考文档 <a href="https://lark.alipay.com/alwxapp/androidpartner/rq0cwn">https://lark.alipay.com/alwxapp/androidpartner/rq0cwn</a></div>
+<p></p>
+<p></p>
+<form action="#" th:action="@{/shuqi/antireplace}" th:object="${antiReplaceModel}" method='POST'>
+    <table>
+        <tr>
+            <td>输入渠道号placeid:</td>
+            <td>
+                <input type="text" name="placeId"/>
+            </td>
+        </tr>
+        <tr>
+            <td>选择文件名:</td>
+            <td>
+                <select name="fileName">
+                    <option>anti_replace_file</option>
+                    <option selected="selected">shuqi_anti_replace_file</option>
+                    <option>sqchannel.txt</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td><input name="submit" type="submit" value="生成并下载" /></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
