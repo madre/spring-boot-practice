@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!-- saved from url=(0131)http://git.cn-hangzhou.oss-cdn.aliyun-inc.com/uploads/dakang.ly/html/1a72831ce9f05e4e12e5f7f61e0a8b25/scheme%E6%B5%8B%E8%AF%95.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Scheme页面</title>
+	
+<link type="text/css" rel="stylesheet" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/content.css"></head>
+<body style="word-break:break-all line-height:30px">
+
+<script>
+	function clickFunc(id){
+		var res;
+		res = document.getElementById(id).value;
+		location.href=res;
+	}
+</script>
+
+
+<h1>书旗 Scheme 调试</h1>
+
+	自定义协议：<br>
+	<input id="txt" type="text" size="100" style="height: 100px;line-height:  30px; font-size: 16px;"><br>
+	<button type="button" onclick="clickFunc(&#39;txt&#39;)">打开</button><br><br>
+
+	打开公益：
+		<a href="shuqi://openapp?params=%7b%22pageName%22%3a%22commonwealHome%22%2c%22params%22%3a%7b%7d%7d">打开应用</a><br><br>
+
+	打开：
+		<a href="shuqi://">打开应用</a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b%22pageName%22%3a+%22writeBook%22%2c%22params%22%3a+%7b%7d%7d"> 写原创 </a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22readWriterBook%22%2c+%22params%22%3a+%7b+%22bookId%22%3a+%226768368%22+%7d+%7d"> 原创阅读页 </a><br><br>
+	
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22payActivity%22%2c+%22params%22%3a+%7b%7d+%7d"> 充值页 </a><br><br>
+	
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22accountDetail%22%2c+%22params%22%3a+%7b%7d+%7d"> 账号详情 </a><br><br>
+	
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22douticketList%22%2c+%22params%22%3a+%7b%7d+%7d"> 豆券记录 </a><br><br>
+	
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22payRecord%22%2c+%22params%22%3a+%7b%7d+%7d"> 充值记录 </a><br><br>
+	
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22purchasedBook%22%2c+%22params%22%3a+%7b%7d+%7d"> 购买记录 </a><br><br>
+	
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22myFavorite%22%2c+%22params%22%3a+%7b%7d+%7d"> 我的收藏 </a><br><br>
+	
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22myComments%22%2c+%22params%22%3a+%7b%7d+%7d"> 我的评论 </a><br><br>
+	
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22myRewardList%22%2c+%22params%22%3a+%7b%7d+%7d"> 打赏记录 </a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22login%22%2c+%22params%22%3a+%7b%7d+%7d"> 登录 </a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22feedback%22%2c+%22params%22%3a+%7b%7d+%7d"> 反馈 </a><br><br>
+
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22mainActivity%22%2c+%22params%22%3a+%7b+%22com.shuqi.intent.extra.TAB_NAME%22%3a+%22tag_bookshelf%22+%7d+%7d">首页：书架</a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22mainActivity%22%2c+%22params%22%3a+%7b+%22com.shuqi.intent.extra.TAB_NAME%22%3a%22tag_searchbook%22%7d%7d">首页：免费</a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b%22pageName%22%3a+%22mainActivity%22%2c+%22params%22%3a+%7b+%22com.shuqi.intent.extra.TAB_NAME%22%3a%22tag_bookstore%22+%7d%7d">首页：书城</a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b%22pageName%22%3a+%22mainActivity%22%2c+%22params%22%3a+%7b+%22com.shuqi.intent.extra.TAB_NAME%22%3a%22tag_writer%22+%7d%7d">首页：原创</a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b%22params%22%3a%7b%22com.shuqi.intent.extra.TAB_NAME%22%3a%22tag_personal%22%7d%2c%22pageName%22%3a%22mainActivity%22%7d">首页：我的</a><br><br>
+
+
+	<h4>需要参数页面</h4>
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22bookDetail%22%2c+%22params%22%3a+%7b+%22bookId%22%3a+%225443512%22%2c+%22title%22%3a+%22%e8%a5%bf%e6%b8%b8%e8%ae%b0%22%2c+%22topclass%22%3a%22%22%7d+%7d">书籍详情</a><br><br>
+
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22browser%22%2c+%22params%22%3a+%7b+%22pageTitle%22%3a+%22%e6%b5%8b%e8%af%95Scheme%22%2c+%22targetUrl%22%3a+%22http%3a%2f%2fwww.shuqi.com%2f%22%2c+%22titleMode%22%3a+%22%22+%7d+%7d"> 浏览网页 </a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22webContribute%22%2c+%22params%22%3a+%7b+%22pageTitle%22%3a+%22%e6%b5%8b%e8%af%95Scheme%e5%be%81%e6%96%87%22%2c+%22targetUrl%22%3a+%22http%3a%2f%2fbs.demowx.shuqi.com%2froute.php%3fsq_pg_param%3dbscw%23!%2fatid%2f11118%22%2c+%22titleMode%22%3a+%22%22+%7d+%7d+"> 征文活动 </a><br><br>
+
+	打开：
+		<a href="shuqi://external?params=%7b+%22pageName%22%3a+%22liveList%22%2c+%22params%22%3a+%7b+%22webTitle%22%3a+%22%e7%9b%b4%e6%92%ad%e5%88%97%e8%a1%a8Scheme%22%2c+%22webUrl%22%3a+%22http%3a%2f%2fbs.demowx.shuqi.com%2froute.php%3fsq_pg_param%3dbslv%22+%7d+%7d"> 直播列表 </a><br><br>
+
+	打开：
+		<a href="shuqi://external?params="> 空参数 </a><br><br>
+
+
+
+	
+
+
+
+<hr>
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<h1>测试 Scheme</h1>
+
+
+
+
+	<p>
+		打开app应用市场：market://
+		<a href="market://details?id=com.shuqi.controller">打开market</a>
+	</p>
+
+
+
+<br>
+	<p>
+		打开app：tbreader://
+		
+		<a href="tbreader://aliwx.com.cn/home?bookid=1234">
+			启动 app
+		</a>
+
+		<br>
+	</p>
+	<p>
+		打开app：intent://
+		
+		
+
+		<a href="intent://*#Intent;launchFlags=0x10000000;component=com.shuqi.controller/com.shuqi.activity.BookCoverWebActivity;S.bookId=6793086;end">
+			启动 app
+		</a>
+
+<!-- intent://aliwx.com.cn/home?bookid=1234#Intent;scheme=tbreader; package=com.wind.schemedemo;end -->
+		<br>
+	</p>
+
+
+	<p>
+		系统处理：
+		
+		<a href="intent://platformapi/startapp?appId=20000001&amp;_t=1472635183958#Intent;scheme=alipays;package=com.eg.android.AlipayGphone;end">
+			intent://platformapi/startapp?appId=20000001&amp;_t=1472635183958#Intent;scheme=alipays;package=com.eg.android.AlipayGphone;end
+		</a>
+
+		<br>
+	</p>
+
+
+
+
+
+	<p>
+		高德地图：从当前位置导航到目的地：
+		<a href="androidamap://navi?sourceApplication=appname&amp;poiname=fangheng&amp;lat=36.547901&amp;lon=104.258354&amp;dev=1&amp;style=2&amp;backScheme=applicationScheme">
+			androidamap://navi?sourceApplication=appname&amp;poiname=fangheng&amp;lat=36.547901&amp;lon=104.258354&amp;dev=1&amp;style=2&amp;backScheme=applicationScheme
+		</a><br><br>
+
+		高德地图：标注某个地点：
+		<a href="androidamap://viewMap?sourceApplication=appname&amp;poiname=abc&amp;lat=36.2&amp;lon=116.1&amp;dev=0">
+			androidamap://viewMap?sourceApplication=appname&amp;poiname=abc&amp;lat=36.2&amp;lon=116.1&amp;dev=0
+		</a><br>
+	</p>
+
+
+	<p>
+		微信充值：
+		<a href="weixin://wap/pay?appid%3Dwxd7e8e0b69307cd03%26noncestr%3Dda49a92b4092489e8317ba9fe5450875%26package%3DWAP%26prepayid%3Dwx20160902013557a3d6c02d040859665225%26sign%3DA74A3421D35980C0AEE3C3BA5465D463%26timestamp%3D1472751357">
+			weixin://wap/pay?appid%3Dwxd7e8e0b69307cd03%26noncestr%3Dda49a92b4092489e8317ba9fe5450875%26package%3DWAP%26prepayid%3Dwx20160902013557a3d6c02d040859665225%26sign%3DA74A3421D35980C0AEE3C3BA5465D463%26timestamp%3D1472751357
+		</a><br>
+		
+	</p>
+
+	<p>
+		打开淘宝：
+		<br>
+		<a href="taobao://item.taobao.com/item.htm?spm=a1z10.3-c.w4002-14141359151.28.m8Vuq0&amp;id=533219732078">
+			taobao://item.taobao.com/item.htm?spm=a1z10.3-c.w4002-14141359151.28.m8Vuq0&amp;id=533219732078
+		</a>
+	</p>
+
+	<p>
+		打开支付宝：
+		<a href="alipays://platformapi/startApp?appId=20000125&amp;orderSuffix=h5_route_token=f6494e5ab18fb66d7990e382c71de519&amp;is_h5_route=true">
+			alipays://platformapi/startApp?appId=20000125&amp;orderSuffix=h5_route_token=f6494e5ab18fb66d7990e382c71de519&amp;is_h5_route=true
+		</a>
+	</p>
+
+	<p>
+		找回支付宝密码：
+		<a href="alipays://platformapi/startapp?appId=20000013&amp;pwdType=ordinaryPassword&amp;_t=1472647504011">
+			alipays://platformapi/startapp?appId=20000013&amp;pwdType=ordinaryPassword&amp;_t=1472647504011
+		</a>
+	</p>
+
+	<p>
+		发送短信：
+		<a href="sms://11817175?body=14%23lVUze%231">
+			sms://11817175?body=14%23lVUze%231
+		</a>
+	</p>
+
+	<p>
+		拨打电话：
+		<a href="tel:18910825982">
+			tel:18910825982
+		</a>
+	</p>
+
+	<p>
+		发送邮件：
+		<a href="mailto:huawei.yhw@alibaba-inc.com">
+			mailto:huawei.yhw@alibaba-inc.com
+		</a>
+	</p>
+
+	本地图片：
+	<p>
+		手机图片：file:///sdcard/tbreader/logo.png
+		file:///android_res/
+		file:///android_asset/
+		<br>
+		<img src="file:///sdcard/tbreader/logo.png">
+	</p>
+
+	本地图片：
+	<p>
+		电脑图片：file:///Users/wind/Documents/logo.png
+		<br>
+		<img src="file:///Users/wind/Documents/logo.png">
+	</p>
+
+
+	<p>
+		content协议: content://com.tbreader.android.provider/images/***
+		<br>
+		<img src="content://com.tbreader.android.provider/images/http%3A%2F%2Fimage.uc.cn%2Fs%2Fwemedia%2Fs%2F2016810%2F237ab6b333c193f97b8f41965d9b57e1/aaa">
+	</p>
+
+
+
+
+
+
+
+
+</body></html>
