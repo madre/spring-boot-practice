@@ -35,7 +35,9 @@ fi
 echo ":mv ${sourceZipFile} ${dstZipPath}${dstZipFile}.zip"
 mv ${sourceZipFile} ${dstZipPath}${dstZipFile}.zip
 
+echo ":rm -rf ${dstZipPath}${dstZipFile}"
 rm -rf ${dstZipPath}${dstZipFile}
+echo ":unzip -o ${dstZipPath}${dstZipFile}.zip -d ${dstZipPath}"
 unzip -o ${dstZipPath}${dstZipFile}.zip -d ${dstZipPath}
 
 #buildFile="./hello.sh"
@@ -43,9 +45,20 @@ buildFile="bash/uitool/buildSkin.sh"
 bash ${buildFile}
 
 outputPath="bash/uitool/skinbuild/skinoutputs/net/"
+gradle_result=$?
+echo ":gradle_result:${gradle_result}"
+if [ ${gradle_result} -eq 0 ]
+then
+    echo "build successfully"
+
+else
+    echo "build failed"
+    exit 1
+fi
 
 echo ${outputPath}
 skinName=${sourceName}
+echo ":mv ${outputPath}2000 ${outputPath}${skinName}"
 mv ${outputPath}2000 ${outputPath}${skinName}
 echo ":zip -r -j ${outputPath}${skinName}.zip ${outputPath}${skinName}"
 zip -r -j ${outputPath}${skinName}.zip ${outputPath}${skinName}

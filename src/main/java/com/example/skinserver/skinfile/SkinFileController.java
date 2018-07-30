@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -109,7 +110,11 @@ public class SkinFileController {
     @GetMapping(path = "/all")
     public
     String getAllSkinFiles(Model model) {
-        model.addAttribute("skinFiles", skinFileRepository.findAll());
+//        Sort.Order idOrder = new Sort.Order(Sort.Direction.DESC, "id");
+//        Sort.Order nameOrder = new Sort.Order(Sort.Direction.ASC,"name");
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+
+        model.addAttribute("skinFiles", skinFileSimpleRepository.findAll(sort));
         return "skinfile_all";
     }
 
@@ -117,7 +122,7 @@ public class SkinFileController {
     @PostMapping("/upload")
     public
     String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
+                                   RedirectAttributes redirectAttributes, Model model) {
         String fileName = file.getOriginalFilename();
 
         String fileNameWithoutExtension = Files.getNameWithoutExtension(fileName);;
@@ -138,12 +143,18 @@ public class SkinFileController {
                 java.nio.file.Files.copy(zipFilePath, destFilePath, REPLACE_EXISTING);
 
                 String cmd = "pwd";
-                String result = getCmdOutput(cmd);
-                LOGGER.debug(result);
+                CmdResult cmdResult = getCmdOutput(cmd);
+                LOGGER.debug(cmdResult.result);
                 String relativePath  = "bash/data-dir/" + sourceName + ".zip";
-                cmd = String.format("bash ./bash/copyToSkinBuilder.sh %s %s", relativePath, sourceName);
-                result = getCmdOutput(cmd);
-                LOGGER.debug(result);
+                cmd = String.format("./bash/copyToSkinBuilder.sh");
+                cmdResult = getCmdOutput("bash", cmd, relativePath, sourceName);
+                LOGGER.debug(cmdResult.result);
+                model.addAttribute("result", cmdResult.result);
+                if (cmdResult.isSucc()) {
+
+                } else {
+                    return "skinfile_result";
+                }
 //                Path buildinfo = Paths.get("images").resolve("buildinfo");
 //                sendFileInternal(buildinfo.toFile());
 //                Path dataZip = Paths.get("images").resolve("2001.zip");
@@ -189,10 +200,16 @@ public class SkinFileController {
     }
 
 
-    private String getCmdOutput(String cmd) throws IOException, InterruptedException {
-        System.out.println("cmd:" + cmd);
-        Process ps = Runtime.getRuntime().exec(cmd);
-        ps.waitFor();
+    private CmdResult getCmdOutput(String... cmd) throws IOException, InterruptedException {
+        for (int i = 0; i < cmd.length; i++) {
+            System.out.println("cmd:" + cmd[i]);
+        }
+//        Process ps = Runtime.getRuntime().exec(cmd);
+        ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+        processBuilder.redirectErrorStream(true);
+
+        Process ps = processBuilder.start();
+        int exitCode = ps.waitFor();
 
         BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
         StringBuffer sb = new StringBuffer();
@@ -200,9 +217,12 @@ public class SkinFileController {
         while ((line = br.readLine()) != null) {
             sb.append(line).append("\n");
         }
-        String result = sb.toString();
-        System.out.println(result);
-        return result;
+        CmdResult cmdResult = new CmdResult();
+        cmdResult.exitCode = exitCode;
+        cmdResult.result = sb.toString();
+        System.out.println(":exitCode: " + cmdResult.exitCode);
+        System.out.println(":result:" + cmdResult.result);
+        return cmdResult;
     }
 
     @GetMapping("/skinOutput/{fileName:.+}")
@@ -242,5 +262,14 @@ public class SkinFileController {
                 .contentType(mediaType)
                 .contentLength(file.contentLength())
                 .body(new InputStreamResource(java.nio.file.Files.newInputStream(file.getFile().toPath(), StandardOpenOption.READ)));
+    }
+
+    private static class CmdResult {
+        public int exitCode;
+        public String result;
+
+        public boolean isSucc() {
+            return exitCode == 0;
+        }
     }
 }

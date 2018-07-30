@@ -1,5 +1,8 @@
 package com.example.skinserver.m9;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -143,5 +146,43 @@ public class M9Util {
          input  : 1111111111
          encoded: bTkwAYWJbKMs3jM+DglJlzmfCK4=
          */
+
+        String cmd = "pwd";
+        String result = null;
+        try {
+            result = getCmdOutput("git", " st");
+//            System.out.println(result);
+//            String relativePath  = "bash/data-dir/" + sourceName + ".zip";
+            cmd = String.format("./bash/hello.sh");
+            result = getCmdOutput("bash", cmd, "aaa", "bbb");
+//            System.out.println(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static String getCmdOutput(String... cmd) throws IOException, InterruptedException {
+        for (int i = 0; i < cmd.length; i++) {
+            System.out.println("cmd:" + cmd[i]);
+        }
+//        Process ps = Runtime.getRuntime().exec(cmd);
+        ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+        processBuilder.redirectErrorStream(true);
+
+        Process ps = processBuilder.start();
+        ps.waitFor();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
+        StringBuffer sb = new StringBuffer();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        String result = sb.toString();
+        System.out.println(result);
+        return result;
     }
 }
