@@ -9,8 +9,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
+
+import javax.servlet.MultipartConfigElement;
 
 @SpringBootApplication
 @EnableConfigurationProperties(value = {StorageProperties.class, ConfigBean.class})
@@ -38,5 +41,14 @@ public class SkinserverApplication {
 		loggingFilter.setIncludePayload(true);
 		loggingFilter.setIncludeHeaders(false);
 		return loggingFilter;
+	}
+	@Bean
+	public MultipartConfigElement multipartConfigElement() {
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+		//允许上传的文件最大值
+		factory.setMaxFileSize("50MB"); //KB,MB
+		/// 设置总上传数据总大小
+		factory.setMaxRequestSize("50MB");
+		return factory.createMultipartConfig();
 	}
 }
