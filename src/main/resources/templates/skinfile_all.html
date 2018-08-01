@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Sprint boot practice: SkinFile CRUD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
 
@@ -130,11 +131,19 @@
 
 
 
+
+
     </style>
     <script>
         function uploadFile(target) {
             document.getElementById("file-name").innerHTML = target.files[0].name;
         }
+
+        function uploading(target) {
+            document.getElementById("file-uploading").style.display="inline";
+            document.getElementById("file-upload").style.display="none";
+        }
+
 
     </script>
     <!--<link rel="stylesheet" type="text/css" href="css/customers_table.css">-->
@@ -146,11 +155,14 @@
 
         <form class="uploadform" method="POST" enctype="multipart/form-data" action="#" th:action="@{/skinFile/upload}">
             <span id="file-name" class="file-box"></span>
-            <label class="file-button" for="select-file">选择文件</label>
+            <label id="label-select" class="file-button" for="select-file">选择文件</label>
             <input type="file" name="file" id="select-file" onchange='uploadFile(this)'/>
 
-            <label class="upload-button" for="upload-file">上传</label>
-            <input type="submit" value="Upload" id="upload-file"/>
+            <label id="file-upload" class="upload-button" for="upload-file">上传</label>
+            <label id="file-uploading" class="file-box buttonload upload-button" style="display: none">
+                <i class="fa fa-spinner fa-spin"></i>正在上传...
+            </label>
+            <input type="submit" value="Upload" id="upload-file" onclick='uploading(this)'/>
         </form>
 
         <div class="list_bg">
